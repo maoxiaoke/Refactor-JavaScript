@@ -411,7 +411,7 @@ function queryOrder (existence) {
 
 还是那句话，「It depends」。
 
-### 当判断条件包含 > 或 <
+<!-- ### 当判断条件包含 > 或 < -->
 
 <!-- ```js
 // 反例
