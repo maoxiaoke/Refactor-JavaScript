@@ -56,15 +56,15 @@ function timeLevel (exception) {
 }
 ```
 
-### 遵循一种命名规范
+### 遵循一种命名规范
 
-社区约定的使用 *大驼峰*、*小驼峰* 命名当然是毋庸置疑的。然而，对变量、函数名、类名等如何「取名字」，并没有较好的社区方案。只有一些建议：
+社区约定的使用 *大驼峰*、*小驼峰* 命名当然是毋庸置疑的。然而，对变量、函数名、类名等如何「取名字」，并没有较好的社区方案。只有一些建议：
 
 1. 准确、精简
 
-「取名字」尽量有准确的单词或短语。比如 `addOrder` 并不是很好的命名，*添加* 操作可以是 *插入* 或 *附加*，也就是说使用 `insertOrder` 或 `appendOrder` 是更为准确的。
+「取名字」尽量有准确的单词或短语。比如 `addOrder` 并不是很好的命名，*添加* 操作可以是 *插入* 或 *附加*，也就是说使用 `insertOrder` 或 `appendOrder` 是更为准确的。
 
-「取名字」应当尽量精简。太长的名字阅读起来特别费力，当你遇到这种不得不起很长名字时候，是不是应该多思考一下。
+「取名字」应当尽量精简。太长的名字阅读起来特别费力，当你遇到这种不得不起很长名字时候，是不是应该多思考一下。
 
 2. 功能明确
 
@@ -87,7 +87,7 @@ function timeLevel (exception) {
 | :-----: | :-----: |
 | fetch | 获取 API 数据 |
 | is    | 判断某一条件 |
-| can   | 表达某种能力 |
+| can   | 表达某种能力 |
 | set   | 赋值        |
 | register | 在某处注册函数 |
 | dispatch | 分发某一操作 |
@@ -190,21 +190,45 @@ sum(1, 2, 3)
 
 功能不单一的函数将难以重构、测试和理解。
 
-### 不要因为数据类型打乱单一职责
+TODO:
 
-本着 “单一性” 的原则，
+- [ ] 如何定义单一职责(即，只做一件事)
 
-### 函数应该只做一层抽象
+<!-- ### 函数应该只做一层抽象
 
-当函数的需要的抽象多于一层时，通常意味着函数功能过于复杂，需将其进行分解以提高其可重用性和可测试性。
+当函数的需要的抽象多于一层时，通常意味着函数功能过于复杂，需将其进行分解以提高其可重用性和可测试性。 -->
 
 ### 移除重复和多余的代码
 
-一定要移除项目中重复和多余的代码。尤其是在任何循环下有重复的代码。
+一定要移除项目中重复和多余的代码。
 
 ### 不要使用标记作为函数参数
 
 这通常意味着函数的单一职责已经被破坏了。这个时候，应当考虑对函数进行再次划分。
+
+```js
+import { isArray } from 'lodash'
+// 反例
+function genIdentifier (comment) {
+  if (isArray(comment)) {
+    return comment.map(item => `${item.id}` + `${item.type}`)
+  } else {
+    return `${comment.id}` + `${comment.type}`
+  }
+}
+
+// 正例
+function genIdentifier (comment) {
+  return `${comment.id}` + `${comment.type}`
+}
+function genIdentifierList (commentList) {
+  return commentList.map(comment => `${comment.id}` + `${comment.type}`)
+}
+```
+
+当然，这有争论。我们当然希望一个函数能够提供完整的功能，这虽然不能覆盖所有的情形，但对于 “小” 函数而言，应该是可取的。
+
+在 [非侵入性地改造函数](### 非侵入性地改造函数) 从业务的角度避免传入一个用于「判断」的 token。
 
 ### 避免副作用
 
@@ -343,7 +367,7 @@ function queryOrder (existence) {
 
 当只需要 `if` 用于条件判断时，可以使用 *短路* 运算符减少代码行数。
 
-`if` 条件为真，利用 `&&` 运算符；`if` 条件为假，利用 `||` 运算符。
+`if` 条件为真，利用 `&&` 运算符；`if` 条件为假，利用 `||` 运算符。
 
 ```js
 // 反例
@@ -355,13 +379,13 @@ function queryOrder (existence) {
 
 // 正例
 function queryOrder (existence) {
-  existence && deleteExistOrder()
+  existence && deleteExistOrder()
 }
 ```
 
-实际上，如果是不习惯使用 *短路* 运算符的用户，上述的代码也并非清晰明了 - 这是一种有争论的做法。
+实际上，如果是不习惯使用 *短路* 运算符的用户，上述的代码也并非清晰明了 - 这是一种有争论的做法。
 
-因此，有些批评认为，**显式优于隐式**：“完整 `if...else` 很有必要，哪怕 `else` 中什么也不做，你也应该说明”。
+因此，有些批评认为，**显式优于隐式**：“完整 `if...else` 很有必要，哪怕 `else` 中什么也不做，你也应该说明”。
 
 ```js
 // 反例
@@ -375,7 +399,7 @@ function queryOrder (existence) {
 function queryOrder (existence) {
   if (existence) {
     deleteExistOrder()
-  } else {
+  } else {
     // Do nothing
   }
 }
@@ -580,9 +604,13 @@ function timeLevel (exception) {
 
 ### 远离 callback hell
 
+TODO:
+
+- [ ] Add description and example
+
 ### 避免嵌套 Promise
 
-避免嵌套 Promise。嵌套的 Promise 会导致代码混乱。
+避免嵌套 Promise。嵌套的 Promise 会导致代码混乱<sup>7</sup>。
 
 ```js
 // 反例
@@ -627,6 +655,14 @@ function printOrder () {
   })
 }
 ```
+
+## Promise 的 then 链总该返回什么
+
+Promise 的 then 链如果没有返回 Promise、一般值或者 thenable 的话，会将 `undefined` 作为 resolved 值返回(假设没有任何 catch 捕获到错误)。当排查问题的时候，这样的错误会极难发现。
+
+TODO:
+
+- [ ] Add example
 
 ## 不要“吞掉” Error
 
@@ -682,6 +718,8 @@ function printOrder () {
 
 3. 「“无情” 重构」
 
+- [ ] 业务迭代，修改一个函数，而不是添加几行代码
+
 ## SOLID
 
 来自书本「Agile Software Development: Principles, Patterns, and Practices」- Martin, Robert C
@@ -712,3 +750,6 @@ https://www.cnblogs.com/pangjianxin/p/7928083.html
 [5] http://taobaofed.org/blog/2017/01/05/writing-readable-code/
 
 [6] https://github.com/tc39/proposal-optional-chaining
+
+[7] http://taoofcode.net/promise-anti-patterns/
+
