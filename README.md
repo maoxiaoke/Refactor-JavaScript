@@ -230,9 +230,13 @@ function genIdentifierList (commentList) {
 
 在 [非侵入性地改造函数](### 非侵入性地改造函数) 从业务的角度避免传入一个用于「判断」的 token。
 
-### 避免副作用
+### 避免副作用 - 纯函数
 
-函数式编程具有更干净和便于测试的特点。
+函数式编程具有更干净和便于测试的特点。纯函数有以下属性<sup>8</sup>：
+
++ 其结果只能从它的参数的值来计算
++ 不能改变外部状态
++ 不能依赖于能被外部操作改变的数据
 
 ### 非侵入性地改造函数
 
@@ -752,4 +756,6 @@ https://www.cnblogs.com/pangjianxin/p/7928083.html
 [6] https://github.com/tc39/proposal-optional-chaining
 
 [7] http://taoofcode.net/promise-anti-patterns/
+
+[8] Functional JavaScript - Michael Fogus
 
